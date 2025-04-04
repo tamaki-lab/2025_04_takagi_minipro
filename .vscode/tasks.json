@@ -1,0 +1,37 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "main.py help",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "main.py",
+                "-h"
+            ]
+        },
+        {
+            "label": "main.py 1GPU(0)",
+            "type": "shell",
+            "command": "python",
+            "options": {
+                "env": {
+                    "CUDA_VISIBLE_DEVICES": "0",
+                },
+            },
+            "args": [
+                "main.py",
+                // "-w",
+                // "16",
+                // "-b",
+                // "64",
+                // "-e",
+                // "5",
+                // "--optimizer",
+                // "Adam",
+            ]
+        },
+    ]
+}
