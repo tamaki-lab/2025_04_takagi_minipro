@@ -1,0 +1,15 @@
+# model_name: "smolVLM"
+# prompt: "USER: <image>\n What is he doing?\n ASSISTANT:"
+# image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+# max_new_tokens: 500
+# do_sample: true
+# temperature: 0.2
+
+model_name: "smolVLM"
+model_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
+processor_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
+prompt: "He plays baseball. Please tell us more about his movements."
+image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+max_new_tokens: 500
+do_sample: true
+temperature: 0.2

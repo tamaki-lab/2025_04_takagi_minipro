@@ -1,0 +1,15 @@
+# model_name: "llava"
+# prompt: "USER: <image>\n 彼は何をしていますか。\n ASSISTANT:"
+# image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+# max_new_tokens: 500
+# do_sample: true
+# temperature: 0.2
+
+model_name: "llava"
+model_id: "llava-hf/llava-1.5-7b-hf"
+processor_id: "llava-hf/llava-1.5-7b-hf"
+prompt: "USER: <image>\nHe plays baseball. Please tell us more about his movements.\nASSISTANT:"
+image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+max_new_tokens: 500
+do_sample: true
+temperature: 0.2

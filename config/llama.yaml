@@ -1,0 +1,20 @@
+# model_name: "llama"
+# prompt: "ユーザー: <image>\n 画像の説明をしてください。\n アシスタント:"
+# image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+# max_new_tokens: 500
+# do_sample: false
+# num_beams: 1
+# no_repeat_ngram_size: 3
+# next_prompt: "次の質問: 詳細を教えてください。"
+
+model_name: "llama"
+model_id: "SakanaAI/Llama-3-EvoVLM-JP-v2"
+processor_id: "TIGER-Lab/Mantis-8B-siglip-llama3"
+image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+max_new_tokens: 500
+do_sample: false
+num_beams: 1
+no_repeat_ngram_size: 3
+temperature: 0.0
+prompt: "<image> He plays baseball. Please tell us more about his movements."
+next_prompt: "彼は野球をしています。彼の動作について詳しく教えてください。"
