@@ -36,5 +36,30 @@
                 // "Adam",
             ]
         },
+        {
+            "name": "main.py 1GPU(0)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "llava.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/src",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+                // "CUDA_LAUNCH_BLOCKING": "1",
+            },
+            "justMyCode": false,
+            "args": [
+                // "-w",
+                // "16",
+                // "-b",
+                // "64",
+                // "-e",
+                // "5",
+                // "--optimizer",
+                // "Adam",
+                "-cn",
+                "llava"
+            ]
+        },
     ]
 }
