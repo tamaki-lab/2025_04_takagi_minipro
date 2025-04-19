@@ -1,0 +1,10 @@
+model_name: llama
+image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+prompt: "<image> What is he doing?"
+#prompt: "What is he doing."
+# prompt: "USER: <image>\nHe plays baseball. Please tell us more about his movements.\nASSISTANT:"
+max_new_tokens: 500
+use_pretrained: true
+torch_home: /mnt/HDD10TB-148/takagi/pretrained_models
+save_dir:
+    root: "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/"

@@ -1,7 +1,7 @@
 import os
-from model.llama import Llama
-from model.llava import Llava
-from model.smolvlm import SmolVLM
+from model.llama.llama import Llama
+from model.llava.llava import Llava
+from model.smolvlm.smolvlm import SmolVLM
 from PIL import Image
 import hydra
 from omegaconf import DictConfig
@@ -46,7 +46,7 @@ def record_result(
 def execution_llama(cfg: DictConfig):
     image = [Image.open(cfg.image_path)]
     prompt = cfg.prompt
-    next_prompt = cfg.next_prompt
+    # next_prompt = cfg.next_prompt
     model = Llama(max_new_tokens=cfg.max_new_tokens).to(DEVICE)
     model.prepare_model()
 
