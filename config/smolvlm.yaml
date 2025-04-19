@@ -1,15 +1,23 @@
 # model_name: "smolVLM"
-# prompt: "USER: <image>\n What is he doing?\n ASSISTANT:"
+# model_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
+# processor_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
+# prompt: "He plays baseball. Please tell us more about his movements."
 # image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
 # max_new_tokens: 500
 # do_sample: true
 # temperature: 0.2
 
-model_name: "smolVLM"
-model_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
-processor_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
-prompt: "He plays baseball. Please tell us more about his movements."
+model_name: smolvlm
 image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
+prompt: "What is he doing?"
 max_new_tokens: 500
+num_beams: 1
 do_sample: true
 temperature: 0.2
+top_k: 4
+penalty_alpha: 0.6
+
+use_pretrained: true
+torch_home: "/mnt/HDD10TB-148/takagi/pretrained_models"
+save_dir:
+  root: "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/"

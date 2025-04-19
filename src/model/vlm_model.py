@@ -40,7 +40,7 @@ def record_result(
 class ModelExecutor:
     def __init__(self, cfg: DictConfig):
         self.cfg = cfg
-        self.model_info = GenerationConfig()
+        self.model_info = GenerationConfig.from_cfg(cfg)
         self.model = configure_model(cfg, self.model_info)
 
     def __call__(self):
