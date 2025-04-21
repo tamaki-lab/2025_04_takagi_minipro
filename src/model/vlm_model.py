@@ -13,7 +13,8 @@ def record_result(
         prompt: str,
         result_text: str,
         image_path: str,
-        generation_kwargs: dict):
+        generation_kwargs: dict,
+        generation_mode: str):
     folder_path = f"{cfg.save_dir.root + cfg.model_name}"
     if folder_path is None:
         raise ValueError(f"Unknown model name: {model_name}")
@@ -29,6 +30,8 @@ def record_result(
         f.write(result_text + "\n")
         f.write("【Image Path】\n")
         f.write(image_path + "\n")
+        f.write("【Generation Mode】\n")
+        f.write(f"{generation_mode}\n")
         f.write("【Generation kwargs】\n")
         for key, value in generation_kwargs.items():
             f.write(f"{key}: {value}\n")
@@ -57,6 +60,8 @@ class ModelExecutor:
         else:
             result_text = output
 
+        generation_mode = self.model_info.get_generation_mode()
+
         # Record the result
         record_result(
             cfg=self.cfg,
@@ -65,7 +70,8 @@ class ModelExecutor:
             prompt=prompt,
             result_text=result_text,
             image_path=self.cfg.image_path,
-            generation_kwargs=self.model.generation_kwargs
+            generation_kwargs=self.model.generation_kwargs,
+            generation_mode=generation_mode
         )
 
 

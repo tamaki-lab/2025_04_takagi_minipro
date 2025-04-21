@@ -9,13 +9,15 @@
 
 model_name: llava
 image_path: "/mnt/NAS-TVS872XT/dataset-lab/Kinetics400.frames/train/hitting baseball/AuoNAN7dyO8_000011_000021/000008.jpg"
-prompt: "USER: <image>\nHe plays baseball. Please tell us more about his movements.\nASSISTANT:"
+prompt: "USER: <image>\nBased on this person's posture and belongings, what kind of behaviour do you think they are exhibiting?\nASSISTANT:"
 max_new_tokens: 500
-num_beams: 1
+num_beams: 50
+num_beam_groups: 1
 do_sample: true
-temperature: 0.2
-top_k: 4
-penalty_alpha: 0.6
+temperature: 0.7
+top_k: 5
+penalty_alpha: 0
+diversity_penalty: 0
 
 use_pretrained: true
 torch_home: "/mnt/HDD10TB-148/takagi/pretrained_models"

@@ -39,13 +39,13 @@ def configure_model(
         set_torch_home(cfg)
 
     if cfg.model_name == 'llava':
-        model = Llava(generation_config=model_info)  # type: ignore[assignment]
+        model = Llava(generation_config=model_info)
 
     elif cfg.model_name == 'llama':
-        model = Llama(generation_config=model_info)  # type: ignore[assignment]
+        model = Llama(generation_config=model_info)
 
     elif cfg.model_name == 'smolvlm':
-        model = SmolVLM(generation_config=model_info)  # type: ignore[assignment]
+        model = SmolVLM(generation_config=model_info)
 
     else:
         raise ValueError('invalid model_info.model_name')
