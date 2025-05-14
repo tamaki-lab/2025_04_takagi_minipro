@@ -1,6 +1,7 @@
 import os
 import csv
 import html
+import json
 from omegaconf import DictConfig
 
 
@@ -11,14 +12,15 @@ def record_result(cfg: DictConfig,
                   result_text: str,
                   image_path: str,
                   generation_kwargs: dict,
-                  generation_mode: str):
+                  generation_mode: str,
+                  selected_images: list[str] = None):
     result_text = extract_assistant_only(result_text)
 
     if cfg.output_format == "csv":
         record_topk_csv(cfg, model_name, prompt, result_text, generation_kwargs, generation_mode)
     else:
         record_to_text(cfg, model_name, max_new_tokens, prompt,
-                       result_text, image_path, generation_kwargs, generation_mode)
+                       result_text, image_path, generation_kwargs, generation_mode, selected_images)
 
 
 def extract_assistant_only(text: str) -> str:
@@ -38,16 +40,39 @@ def record_to_text(
         result_text,
         image_path,
         generation_kwargs,
-        generation_mode):
-    folder_path = f"{cfg.save_dir.root + cfg.model_name}"
-    os.makedirs(folder_path, exist_ok=True)
-    file_name = f"{model_name}_{max_new_tokens}.txt"
+        generation_mode,
+        selected_images=None):
+
+    if model_name == "llama":
+        mode_name = generation_mode.lower()
+        if "beam" in mode_name:
+            mode_folder = "beam_search"
+        elif "sampling" in mode_name:
+            mode_folder = "sampling"
+        else:
+            mode_folder = "other"  # ← beam/sampling以外はotherへ
+
+        folder_path = os.path.join(
+            "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/llama",
+            mode_folder
+        )
+        os.makedirs(folder_path, exist_ok=True)
+        file_name = f"llama_{max_new_tokens}_{mode_folder}.txt"
+    else:
+        folder_path = f"{cfg.save_dir.root + cfg.model_name}"
+        os.makedirs(folder_path, exist_ok=True)
+        file_name = f"{model_name}_{max_new_tokens}.txt"
+
     file_path = os.path.join(folder_path, file_name)
 
     with open(file_path, "a", encoding="utf-8") as f:
         f.write("【Prompt】\n" + prompt + "\n")
         f.write("【Result】\n" + result_text + "\n")
         f.write("【Image Path】\n" + image_path + "\n")
+        if selected_images:
+            f.write("【Selected Frames for 2x2 Grid】\n")
+            for img in selected_images:
+                f.write(f"- {img}\n")
         f.write("【Generation Mode】\n" + generation_mode + "\n")
         f.write("【Generation kwargs】\n")
         for key, value in generation_kwargs.items():
@@ -114,3 +139,48 @@ def record_topk_csv(cfg, model_name, prompt, result_text, generation_kwargs, gen
             writer.writerow(row)
 
     print(f"Top-k CSV result saved to: {file_path}")
+
+
+def record_folder_result_csv(csv_path: str,
+                             folder_name: str,
+                             result_text: str,
+                             generation_mode: str,
+                             generation_kwargs: dict,
+                             ground_truth: dict):
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+
+    file_exists = os.path.exists(csv_path)
+    write_header = not file_exists
+
+    # kwargs は手動文字列整形（従来形式）
+    generation_kwargs_str = "\n".join(f"{k}: {v}" for k, v in generation_kwargs.items())
+
+    # ground_truth_json を1列にまとめる（改行・整形なし）
+    ground_truth_str = json.dumps({
+        "label": ground_truth.get("label", ""),
+        "template": ground_truth.get("template", ""),
+        "placeholders": ground_truth.get("placeholders", [])
+    }, ensure_ascii=False)
+
+    with open(csv_path, mode="a", newline="", encoding="utf-8") as csvfile:
+        fieldnames = ["folder", "result", "ground_truth_json", "generation_mode", "generation_kwargs"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        if write_header:
+            writer.writeheader()
+            # 1行目だけにmodeとkwargsを書き込む
+            writer.writerow({
+                "folder": "",
+                "result": "",
+                "ground_truth_json": "",
+                "generation_mode": generation_mode,
+                "generation_kwargs": generation_kwargs_str
+            })
+
+        writer.writerow({
+            "folder": folder_name,
+            "result": result_text,
+            "ground_truth_json": ground_truth_str,
+            "generation_mode": "",
+            "generation_kwargs": ""
+        })
