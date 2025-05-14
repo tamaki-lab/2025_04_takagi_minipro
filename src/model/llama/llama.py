@@ -12,7 +12,7 @@ from .llama_preprocessor import LlamaPreprocessor  # ★ 追加
 class Llama(nn.Module):
     def __init__(self, generation_config: GenerationConfig = GenerationConfig()):
         super().__init__()
-        self.device = "cuda:2" if torch.cuda.is_available() else "cpu"
+        self.device = "cuda:3" if torch.cuda.is_available() else "cpu"
         self.generation_kwargs = generation_config.to_dict()
 
     def prepare_model(self):
