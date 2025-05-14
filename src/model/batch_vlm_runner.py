@@ -61,7 +61,12 @@ def main(cfg: DictConfig):
     start_folder = cfg.get("start_folder", 1)
     num_samples = cfg.get("num_samples", 5)
     base_path = os.path.dirname(os.path.dirname(cfg.image_path))  # → /frames
-    csv_path = "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/llama/batch_SSv2_result/folder_summary1-100.csv"
+    csv_path = os.path.join(
+        cfg.save_dir.root,
+        "llama",
+        "batch_SSv2_result",
+        cfg.get("csv_filename", "folder_summary1-100.csv")  # デフォルト名を維持
+    )
 
     for i in range(start_folder, start_folder + num_samples):
         folder_path = os.path.join(base_path, str(i))
