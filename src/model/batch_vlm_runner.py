@@ -5,10 +5,8 @@ import json
 from omegaconf import DictConfig
 from copy import deepcopy
 import hydra
-from model.record_result import (
-    record_folder_result_csv,
-    record_result,
-)
+from model.record_result import record_folder_result_csv
+
 from model.vlm_model import ModelExecutor
 from model.image_utils import concat_images_2x2_from_base
 
@@ -21,13 +19,13 @@ def run_model_and_get_result(cfg: DictConfig) -> str:
     image, _ = concat_images_2x2_from_base(cfg.image_path)
     image = [image]
 
-    save_dir = "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/image_22"
-    os.makedirs(save_dir, exist_ok=True)
+    # save_dir = "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/image_22"
+    # os.makedirs(save_dir, exist_ok=True)
 
-    base_filename = os.path.basename(cfg.image_path).replace(".jpg", "")
-    save_path = os.path.join(save_dir, f"{base_filename}_2x2.jpg")
-    image[0].save(save_path)
-    print(f"Combined 2x2 image saved to: {save_path}")
+    # base_filename = os.path.basename(cfg.image_path).replace(".jpg", "")
+    # save_path = os.path.join(save_dir, f"{base_filename}_2x2.jpg")
+    # image[0].save(save_path)
+    # print(f"Combined 2x2 image saved to: {save_path}")
 
     prompt = cfg.prompt
 
