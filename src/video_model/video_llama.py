@@ -13,7 +13,7 @@ from omegaconf import DictConfig
 @hydra.main(config_path="/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/config",
             config_name="video_llama", version_base=None)
 def main(cfg: DictConfig):
-    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = cfg.device_visible
     device = torch.device("cuda:0")
 
     model_name = "DAMO-NLP-SG/VideoLLaMA3-2B"
@@ -76,7 +76,15 @@ def main(cfg: DictConfig):
         if "pixel_values" in inputs:
             inputs["pixel_values"] = inputs["pixel_values"].to(torch.bfloat16)
 
-        output_ids = model.generate(**inputs, max_new_tokens=64)
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=cfg.max_new_tokens,
+            num_beams=cfg.num_beams,
+            do_sample=cfg.do_sample,
+            temperature=cfg.temperature,
+            top_k=cfg.top_k,
+            top_p=cfg.top_p,
+        )
         response = processor.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
         print(response)
 

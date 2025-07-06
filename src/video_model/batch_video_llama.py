@@ -11,7 +11,7 @@ from omegaconf import DictConfig
 import hydra
 
 
-def process_video(video_path, question, resize_size, crop_size, model, processor, device):
+def process_video(video_path, question, resize_size, crop_size, model, processor, device, cfg):
     with tempfile.TemporaryDirectory() as tmpdir:
         frame_pattern = os.path.join(tmpdir, "frame_%03d.jpg")
         (
@@ -56,7 +56,12 @@ def process_video(video_path, question, resize_size, crop_size, model, processor
         if "pixel_values" in inputs:
             inputs["pixel_values"] = inputs["pixel_values"].to(torch.bfloat16)
 
-        output_ids = model.generate(**inputs, max_new_tokens=64)
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=cfg.max_new_tokens,
+            num_beams=cfg.num_beams,
+            do_sample=cfg.do_sample,
+        )
         response = processor.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
         return response
 
@@ -64,7 +69,7 @@ def process_video(video_path, question, resize_size, crop_size, model, processor
 @hydra.main(config_path="/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/config",
             config_name="video_llama", version_base=None)
 def main(cfg: DictConfig):
-    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = cfg.device_visible
     device = torch.device("cuda:0")
 
     model_name = "DAMO-NLP-SG/VideoLLaMA3-2B"
@@ -96,7 +101,7 @@ def main(cfg: DictConfig):
 
     output_dir = "/mnt/HDD10TB-148/takagi/2025_04_takagi_minipro/src/result/video_llama"
     os.makedirs(output_dir, exist_ok=True)
-    csv_path = os.path.join(output_dir, "video_llama.csv")
+    csv_path = os.path.join(output_dir, "video_llama50000.csv")
 
     with open(csv_path, "a", newline='', encoding="utf-8") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=["video_path", "result_text", "ground_truth", "question"])
@@ -120,7 +125,8 @@ def main(cfg: DictConfig):
                 cfg.crop,
                 model,
                 processor,
-                device
+                device,
+                cfg
             )
 
             gt_info = gt_dict.get(str(i), {"label": "", "placeholders": []})
